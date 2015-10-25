@@ -23,6 +23,11 @@ namespace TrustFund.Client.Proxies.Proxies
             return Channel.AddFile(file);
         }
 
+        public void UpdateFile(CustomerFile file)
+        {
+            Channel.UpdateFile(file);
+        }
+
         public CustomerFile[] GetCustomerFiles()
         {
             return Channel.GetCustomerFiles();
@@ -31,6 +36,11 @@ namespace TrustFund.Client.Proxies.Proxies
         public CustomerFile GetCustomerFileById(int FileId)
         {
             return Channel.GetCustomerFileById(FileId);
+        }
+
+        public CustomerFile GetCustomerFileByName(string name)
+        {
+            return Channel.GetCustomerFileByName(name);
         }
 
         public Task DeleteFileAsync(int fileId)
@@ -51,6 +61,17 @@ namespace TrustFund.Client.Proxies.Proxies
         public Task<CustomerFile> GetCustomerFileByIdAsync(int FileId)
         {
             return Channel.GetCustomerFileByIdAsync(FileId);
+        }
+
+
+        public Task UpdateFileAsync(CustomerFile file)
+        {
+            return Channel.UpdateFileAsync(file); 
+        }
+
+        public Task<CustomerFile> GetCustomerFileByNameAsync(string name)
+        {
+            return Channel.GetCustomerFileByNameAsync(name);
         }
     }
 }

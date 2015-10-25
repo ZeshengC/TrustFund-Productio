@@ -29,6 +29,12 @@ namespace TrustFund.Client.Contracts
         [OperationContract]
         [FaultContract(typeof(NotFoundException))]
         [FaultContract(typeof(AuthorizationValidationException))]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        void UpdateFile(CustomerFile file);
+
+        [OperationContract]
+        [FaultContract(typeof(NotFoundException))]
+        [FaultContract(typeof(AuthorizationValidationException))]
         CustomerFile[] GetCustomerFiles();
 
         [OperationContract]
@@ -36,15 +42,24 @@ namespace TrustFund.Client.Contracts
         [FaultContract(typeof(AuthorizationValidationException))]
         CustomerFile GetCustomerFileById(int FileId);
 
+        [OperationContract]
+        [FaultContract(typeof(NotFoundException))]
+        [FaultContract(typeof(AuthorizationValidationException))]
+        CustomerFile GetCustomerFileByName(string name);
+
         #region Async operations
 
         Task DeleteFileAsync(int fileId);
 
         Task<CustomerFile> AddFileAsync(CustomerFile file);
 
+        Task UpdateFileAsync(CustomerFile file);
+
         Task<CustomerFile[]> GetCustomerFilesAsync();
 
         Task<CustomerFile> GetCustomerFileByIdAsync(int FileId);
+
+        Task<CustomerFile> GetCustomerFileByNameAsync(string name);
         #endregion
 
     }

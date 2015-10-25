@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TrustFund.Client.Contracts;
 using Core.Common.ServiceModel;
+using System.ComponentModel.Composition;
 
 namespace TrustFund.Client.Proxies
 {
-    public class AccountClient:UserClientBase<IAccountService>, IAccountService
+    [Export(typeof(IAccountService))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class AccountClient : UserClientBase<IAccountService>, IAccountService
     {
 
         public Entities.Account GetCustomerAccountInfo(string loginEmail)

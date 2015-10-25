@@ -23,6 +23,16 @@ namespace TrustFund.Data.Data_Repositories
             }
         }
 
+        public CustomerFile GetByName(string name)
+        {
+            using (TrustFundContext entityContext = new TrustFundContext())
+            {
+                return (from c in entityContext.CustomerFilesSet
+                        where c.FileName == name
+                        select c).FirstOrDefault();
+            }
+        }
+
         protected override CustomerFile AddEntity(TrustFundContext entityContext, CustomerFile entity)
         {
             return entityContext.CustomerFilesSet.Add(entity);
@@ -48,5 +58,8 @@ namespace TrustFund.Data.Data_Repositories
                     select e).FirstOrDefault();
         }
 
+
+
+        
     }
 }

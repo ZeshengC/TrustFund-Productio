@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,10 +25,12 @@ namespace TrustFund.Web.Controllers.API
     public class CustomerApiController : ApiControllerBase
     {
         private ICustomerFileService _CustomerFileService;
+        private IAccountService _AccountService;
         [ImportingConstructor]
-        public CustomerApiController(ICustomerFileService customerFileService)
+        public CustomerApiController(ICustomerFileService customerFileService, IAccountService accountService)
         {
             _CustomerFileService = customerFileService;
+            _AccountService = accountService;
         }
 
         protected override void RegisterServices(List<global::Core.Common.Contracts.IServiceContract> disposableServices)
@@ -47,40 +50,60 @@ namespace TrustFund.Web.Controllers.API
                     return response;
                 });
         }
-<<<<<<< HEAD
 
         [HttpPost]
         [Route("upload")]
         public async Task<HttpResponseMessage> UploadFile(HttpRequestMessage request)
         {
-            HttpResponseMessage response = null;
 
-            
+            HttpResponseMessage response = null;
             if (!request.Content.IsMimeMultipartContent())
             {
                 UploadedFileTypeException ex = new UploadedFileTypeException("Uploaded file type is not supported!");
                 throw new FaultException<UploadedFileTypeException>(ex, ex.Message);
             }
-            var uploadPath = HttpContext.Current.Server.MapPath("~/UploadedFiles");
+
+            var uploadPath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + User.Identity.Name);
+            if(!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
             var multipartFormDataStreamProvider = new UploadMultipartFormProvider(uploadPath);
             await request.Content.ReadAsMultipartAsync(multipartFormDataStreamProvider);
 
-            string[] names = multipartFormDataStreamProvider.FileData.Select(multiPartData => multiPartData.LocalFileName).ToArray();
-            response = request.CreateResponse<string[]>(HttpStatusCode.OK,names);
+            string fullName = multipartFormDataStreamProvider.FileData.Select(multiPartData => multiPartData.LocalFileName).FirstOrDefault();
+            string name = Path.GetFileName(fullName);
+
+            //check if exist in the database
+            CustomerFile existFile = _CustomerFileService.GetCustomerFileByName(name);
+
+            CustomerFile addedFile;
+            if(existFile == null)
+            {
+                string relativePath = "/UploadedFiles/" + User.Identity.Name + "/" + name;
+                int accountId = _AccountService.GetCustomerAccountInfo(User.Identity.Name).AccountId;
+
+                CustomerFile file = new CustomerFile
+                {
+                    FileName = name,
+                    AccountId = accountId,
+                    UploadDate = DateTime.Now,
+                    Type = Common.FileType.LegalDoc,
+                    Directory = relativePath
+                };
+
+                addedFile = _CustomerFileService.AddFile(file);
+            }
+            else
+            {
+                existFile.UploadDate = DateTime.Now;
+                _CustomerFileService.UpdateFile(existFile);
+                addedFile = existFile;
+            }
+            
+            response = request.CreateResponse<CustomerFile>(HttpStatusCode.OK, addedFile);
             return response;
         }
 
-=======
-        /*
-        [HttpPost]
-        [Route("upload")]
-        public HttpResponseMessage UploadFile(HttpRequestMessage request)
-        {
-            List<int> newIds = new List<int>();
-            for(int i=0;i<Request.)
-        }
-        */
->>>>>>> origin/master
+        
 
 
     }

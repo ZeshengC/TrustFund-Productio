@@ -20,10 +20,17 @@ namespace TrustFund.Business.Contracts
         CustomerFile AddFile(CustomerFile file);
 
         [OperationContract]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        void UpdateFile(CustomerFile file);
+
+        [OperationContract]
         CustomerFile[] GetCustomerFiles();
 
         [OperationContract]
         CustomerFile GetCustomerFileById(int FileId);
+
+        [OperationContract]
+        CustomerFile GetCustomerFileByName(string name);
 
 
         

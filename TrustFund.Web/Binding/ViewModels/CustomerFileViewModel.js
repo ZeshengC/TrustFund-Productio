@@ -7,8 +7,9 @@ appMainModule.controller("CustomerFileViewModel", function ($scope, $http,$modal
 
     var getUploadedFiles = function () {
         viewModelHelper.apiGet("api/customer/uploadedFiles", null, function (result) {
+            
             angular.forEach(result.data, function (file) {
-                file.UploadDate = new Date(parseInt(file.UploadDate.replace(/\/Date\((\d+)\)\//gi, "$1"))).toLocaleDateString(); //parse date data to readable format.
+                file.UploadDate = new Date(file.UploadDate).toLocaleString(); //parse date data to readable format.
             });
             $scope.files = result.data;
         });
@@ -50,14 +51,33 @@ appMainModule.directive('uploadFile', function () {
         controller: function ($scope, $element, $attrs) {
             $($element).on('fileuploaded', function (event, data, previewId, index) {
                 console.log(data);
-                var responses = data.response;
-                angular.forEach(responses, function (response) {
-                    response.UploadDate = new Date(parseInt(file.UploadDate.replace(/\/Date\((\d+)\)\//gi, "$1"))).toLocaleDateString(); //parse date to readable format. 
-                    $scope.items.push(response);
-                });
+                var response = data.response;
+                response.UploadDate = new Date(response.UploadDate).toLocaleString(); //parse date to readable format. 
+                $scope.addOrUpdate(response);
                 $scope.$apply();
                 console.log($scope.items);
             });
+
+            $scope.addOrUpdate = function (file) {
+                var exists = false;
+                angular.forEach($scope.items, function (item,index,theArray) {
+                    if(!exists)
+                    {
+                        if(item.FileName == file.FileName)
+                        {
+                            $scope.items[index] = file;
+                            exists = true;
+                        }
+                    }
+                });
+                if(!exists)
+                {
+                    $scope.items.push(file);
+                }
+                $scope.$apply();
+
+
+            };
         }
     };
 });

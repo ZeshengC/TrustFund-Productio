@@ -12,5 +12,7 @@ namespace TrustFund.Data.Contracts.Repository_Interface
     public interface ICustomerFileRepository:IDataRepository<CustomerFile>
     {
         IEnumerable<CustomerFile> GetCustomerFilesByAccount(Account account);
+
+        CustomerFile GetByName(string name);
     }
 }

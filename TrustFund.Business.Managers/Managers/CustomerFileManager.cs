@@ -84,5 +84,27 @@ namespace TrustFund.Business.Managers
                 return file;
             });
         }
+
+        public CustomerFile GetCustomerFileByName(string name)
+        {
+            return ExecuteFaultHandledOperation(() =>
+            {
+                ICustomerFileRepository customerFileRepository = _DataRepositoryFactory.GetDataRepository<ICustomerFileRepository>();
+                CustomerFile file = customerFileRepository.GetByName(name);
+                return file;
+            });
+        }
+
+        public void UpdateFile(CustomerFile file)
+        {
+            ExecuteFaultHandledOperation(() =>
+            {
+                ICustomerFileRepository customerFileRepository = _DataRepositoryFactory.GetDataRepository<ICustomerFileRepository>();
+                CustomerFile updatedFile = customerFileRepository.Update(file);
+            });
+        }
+
+
+        
     }
 }

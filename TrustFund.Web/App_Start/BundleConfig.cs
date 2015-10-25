@@ -44,11 +44,9 @@ namespace TrustFund.Web
                       "~/Content/bootstrap.css",
                       "~/Content/metro-bootstrap.css",
                       "~/Content/Site.css",
-<<<<<<< HEAD
-                      "~/Content/bootstrap-fileinput/css/fileinput.css"
-=======
+                      "~/Content/bootstrap-fileinput/css/fileinput.css",
                       "~/Content/bootstrap-fileinput/css/fileinput.min.css"
->>>>>>> origin/master
+
                       ));
             bundles.Add(new ScriptBundle("~/bundles/uploadFiles").Include(
                 "~/Scripts/fileinput.min.js"
