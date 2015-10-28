@@ -17,7 +17,7 @@ namespace TrustFund.Data
             : base("name = TrustFund")
         {
             Database.SetInitializer<TrustFundContext>(null);
-            AppDomain.CurrentDomain.SetData("DataDirectory", @"C:\Users\PC\Documents\GitHub\TrustFund\TrustFund.Data\Migrations");
+            AppDomain.CurrentDomain.SetData("DataDirectory", @"C:\Users\jasonc\Documents\GitHub\TrustFund-Production\TrustFund.Data\Migrations");
         }
 
         public DbSet<Account> AccountSet { get; set; }
