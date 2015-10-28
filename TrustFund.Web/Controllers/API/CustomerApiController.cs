@@ -55,52 +55,55 @@ namespace TrustFund.Web.Controllers.API
         [Route("upload")]
         public async Task<HttpResponseMessage> UploadFile(HttpRequestMessage request)
         {
-
-            HttpResponseMessage response = null;
-            if (!request.Content.IsMimeMultipartContent())
+            return await GetHttpResponseAsync(request, async () =>
             {
-                UploadedFileTypeException ex = new UploadedFileTypeException("Uploaded file type is not supported!");
-                throw new FaultException<UploadedFileTypeException>(ex, ex.Message);
-            }
-
-            var uploadPath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + User.Identity.Name);
-            if(!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-            var multipartFormDataStreamProvider = new UploadMultipartFormProvider(uploadPath);
-            await request.Content.ReadAsMultipartAsync(multipartFormDataStreamProvider);
-
-            string fullName = multipartFormDataStreamProvider.FileData.Select(multiPartData => multiPartData.LocalFileName).FirstOrDefault();
-            string name = Path.GetFileName(fullName);
-
-            //check if exist in the database
-            CustomerFile existFile = _CustomerFileService.GetCustomerFileByName(name);
-
-            CustomerFile addedFile;
-            if(existFile == null)
-            {
-                string relativePath = "/UploadedFiles/" + User.Identity.Name + "/" + name;
-                int accountId = _AccountService.GetCustomerAccountInfo(User.Identity.Name).AccountId;
-
-                CustomerFile file = new CustomerFile
+                HttpResponseMessage response = null;
+                if (!request.Content.IsMimeMultipartContent())
                 {
-                    FileName = name,
-                    AccountId = accountId,
-                    UploadDate = DateTime.Now,
-                    Type = Common.FileType.LegalDoc,
-                    Directory = relativePath
-                };
+                    UploadedFileTypeException ex = new UploadedFileTypeException("Uploaded file type is not supported!");
+                    throw new FaultException<UploadedFileTypeException>(ex, ex.Message);
+                }
 
-                addedFile = _CustomerFileService.AddFile(file);
-            }
-            else
-            {
-                existFile.UploadDate = DateTime.Now;
-                _CustomerFileService.UpdateFile(existFile);
-                addedFile = existFile;
-            }
+                var uploadPath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + User.Identity.Name);
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+                var multipartFormDataStreamProvider = new UploadMultipartFormProvider(uploadPath);
+                await request.Content.ReadAsMultipartAsync(multipartFormDataStreamProvider);
+
+                string fullName = multipartFormDataStreamProvider.FileData.Select(multiPartData => multiPartData.LocalFileName).FirstOrDefault();
+                string name = Path.GetFileName(fullName);
+
+                //check if exist in the database
+                CustomerFile existFile = _CustomerFileService.GetCustomerFileByName(name);
+
+                CustomerFile addedFile;
+                if (existFile == null)
+                {
+                    string relativePath = "/UploadedFiles/" + User.Identity.Name + "/" + name;
+                    int accountId = _AccountService.GetCustomerAccountInfo(User.Identity.Name).AccountId;
+
+                    CustomerFile file = new CustomerFile
+                    {
+                        FileName = name,
+                        AccountId = accountId,
+                        UploadDate = DateTime.Now,
+                        Type = Common.FileType.LegalDoc,
+                        Directory = relativePath
+                    };
+
+                    addedFile = _CustomerFileService.AddFile(file);
+                }
+                else
+                {
+                    existFile.UploadDate = DateTime.Now;
+                    _CustomerFileService.UpdateFile(existFile);
+                    addedFile = existFile;
+                }
+
+                response = request.CreateResponse<CustomerFile>(HttpStatusCode.OK, addedFile);
+                return response;
+            });
             
-            response = request.CreateResponse<CustomerFile>(HttpStatusCode.OK, addedFile);
-            return response;
         }
 
         

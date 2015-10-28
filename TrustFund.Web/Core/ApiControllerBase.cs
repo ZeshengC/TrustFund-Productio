@@ -74,6 +74,37 @@ namespace TrustFund.Web.Core
             return response;
         }
 
+        protected async Task<HttpResponseMessage> GetHttpResponseAsync(HttpRequestMessage request, Func<Task<HttpResponseMessage>> codeToExecute)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await codeToExecute.Invoke();
+            }
+            catch (SecurityException ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (FaultException<AuthorizationValidationException> ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (FaultException<UploadedFileTypeException> ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.UnsupportedMediaType, ex.Message);
+            }
+            catch (FaultException ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            return response;
+        }
+
         
 
         
