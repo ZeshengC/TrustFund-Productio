@@ -32,7 +32,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="n in files">
-                    <td><a href="{{n.Directory}}" target="_blank">{{n.FileName}}</a></td>
+                    <td><a href ng-click="download(n.Directory)">{{n.FileName}}</a></td>
                     <td>{{n.UploadDate}}</td>
                 </tr>
             </tbody>

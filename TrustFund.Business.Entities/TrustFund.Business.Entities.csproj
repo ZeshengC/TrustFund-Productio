@@ -47,6 +47,13 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="CustomerFile.cs" />
+    <Compile Include="Fund.cs" />
+    <Compile Include="FundManager.cs" />
+    <Compile Include="FundPerformance.cs" />
+    <Compile Include="Investment.cs" />
+    <Compile Include="Investor.cs" />
+    <Compile Include="PNLInvestment.cs" />
+    <Compile Include="PNLInvestmentNetPerformance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
