@@ -8,7 +8,7 @@ using TrustFund.Business.Entities;
 
 namespace TrustFund.Data.Contracts.Repository_Interface
 {
-    public interface IFundManager:IDataRepository<FundManager>
+    public interface IPNLInvestmentRepository:IDataRepository<PNLInvestment>
     {
     }
 }

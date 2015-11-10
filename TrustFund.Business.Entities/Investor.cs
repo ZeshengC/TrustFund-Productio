@@ -23,17 +23,20 @@ namespace TrustFund.Business.Entities
         {
             get
             {
-                throw new NotImplementedException();
+                return InvestorId;
             }
             set
             {
-                throw new NotImplementedException();
+                InvestorId = value;
             }
         }
 
         public int OwnedAccountId
         {
-            get { throw new NotImplementedException(); }
+            get 
+            {
+                return AccountID;
+            }
         }
     }
 }

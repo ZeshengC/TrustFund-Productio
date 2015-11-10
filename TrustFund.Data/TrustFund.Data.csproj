@@ -91,11 +91,14 @@
   <ItemGroup>
     <Compile Include="Data Repositories\FundPerformanceRepository.cs" />
     <Compile Include="Data Repositories\FundManagerRepository.cs" />
+    <Compile Include="Data Repositories\PNLInvestmentRepository.cs" />
     <Compile Include="Data Repositories\FundRepository.cs" />
     <Compile Include="Data Repositories\PNLInvestmentNetPerformanceRepository.cs" />
     <Compile Include="Data Repositories\InvestmentRepository.cs" />
     <Compile Include="Data Repositories\AccountRepository.cs" />
     <Compile Include="Data Repositories\CustomerFileRepository.cs" />
+    <Compile Include="Data Repositories\InvestorRepository.cs" />
+    <Compile Include="Data Repositories\PNLInvestorRepository.cs" />
     <Compile Include="DataRepositoryBase.cs" />
     <Compile Include="DataRepositoryFactory.cs" />
     <Compile Include="Migrations\201509281555563_TrustFund.Data.Migrations.cs" />

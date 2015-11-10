@@ -9,9 +9,9 @@ using TrustFund.Data.Contracts.Repository_Interface;
 
 namespace TrustFund.Data.Data_Repositories
 {
-    [Export(typeof(IFundManager))]
+    [Export(typeof(IFundManagerRepository))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class FundManagerRepository : DataRepositoryBase<FundManager>, IFundManager
+    public class FundManagerRepository : DataRepositoryBase<FundManager>, IFundManagerRepository
     {
 
         protected override IEnumerable<FundManager> GetEntities(TrustFundContext entityContext)
