@@ -51,6 +51,8 @@ build/
 *.pidb
 *.log
 *.scc
+*.ldf
+*.mdf
 
 # OS generated files #
 .DS_Store*

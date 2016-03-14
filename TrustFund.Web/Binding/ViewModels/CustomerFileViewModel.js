@@ -30,6 +30,10 @@ appMainModule.controller("CustomerFileViewModel", function ($scope, $http,$modal
             }
         });
     };
+    $scope.download = function (path) {
+        console.log(path);
+        window.open(path, "_blank");
+    };
 });
 
 appMainModule.controller('uploadFileModalCtrl', function ($scope, $modalInstance, items) {
@@ -37,6 +41,7 @@ appMainModule.controller('uploadFileModalCtrl', function ($scope, $modalInstance
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
+
 });
 
 //manipulate the upload file template
@@ -50,14 +55,12 @@ appMainModule.directive('uploadFile', function () {
         },
         controller: function ($scope, $element, $attrs) {
             $($element).on('fileuploaded', function (event, data, previewId, index) {
-                console.log(data);
                 var response = data.response;
                 response.UploadDate = new Date(response.UploadDate).toLocaleString(); //parse date to readable format. 
                 $scope.addOrUpdate(response);
                 $scope.$apply();
-                console.log($scope.items);
             });
-
+            
             $scope.addOrUpdate = function (file) {
                 var exists = false;
                 angular.forEach($scope.items, function (item,index,theArray) {
@@ -75,8 +78,6 @@ appMainModule.directive('uploadFile', function () {
                     $scope.items.push(file);
                 }
                 $scope.$apply();
-
-
             };
         }
     };
