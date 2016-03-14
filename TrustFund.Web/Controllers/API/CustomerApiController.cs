@@ -79,7 +79,7 @@ namespace TrustFund.Web.Controllers.API
                 CustomerFile addedFile;
                 if (existFile == null)
                 {
-                    string relativePath = "/UploadedFiles/" + User.Identity.Name + "/" + name;
+                    string relativePath = "/api/customer/getfile/" + User.Identity.Name + "/" + name;
                     int accountId = _AccountService.GetCustomerAccountInfo(User.Identity.Name).AccountId;
 
                     CustomerFile file = new CustomerFile
@@ -106,6 +106,15 @@ namespace TrustFund.Web.Controllers.API
             
         }
 
+        [Route("GetFile")]
+        public HttpResponseMessage GetFile(HttpRequestMessage request)
+        {
+            return GetHttpResponse(request, () =>
+                {
+                    HttpResponseMessage response = request.CreateResponse<int>(HttpStatusCode.OK, 2);
+                    return response;
+                });
+        }
         
 
 
